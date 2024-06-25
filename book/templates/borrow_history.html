@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block head_title %} Borrowing History {% endblock %}
+{% block content %}
+
+<div class="my-10 py-3 px-4 bg-white rounded-xl shadow-md">
+  <h1 class="font-bold text-3xl text-center pb-5 pt-2">Borrowing History</h1>
+  <hr />
+  <form method="get" action="{% url 'transaction_report' %}">
+    <div class="flex justify-center">
+      <div class="mt-10 pl-3 pr-2 bg-white border rounded-md border-gray-500 flex justify-between items-center relative w-4/12 mx-2">
+        <label for="start_date">From:</label>
+        <input class="appearance-none w-full outline-none focus:outline-none active:outline-none" type="date" id="start_date" name="start_date" />
+      </div>
+
+      <div class="mt-10 pl-3 pr-2 bg-white border rounded-md border-gray-500 flex justify-between items-center relative w-4/12">
+        <label for="end_date">To:</label>
+        <input class="appearance-none w-full outline-none focus:outline-none active:outline-none" type="date" id="end_date" name="end_date" />
+      </div>
+      <div class="mt-10 pl-3 pr-2 flex justify-between items-center relative w-4/12">
+        <button class="bg-teal-700 hover:bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+          Filter
+        </button>
+      </div>
+    </div>
+  </form>
+  <table class="table-auto mx-auto w-full px-5 rounded-xl mt-8 border dark:border-neutral-500">
+    <thead class="bg-teal-500 text-white text-left">
+      <tr class="bg-gradient-to-tr from-teal-600 to-teal-600 rounded-md py-2 px-4 text-white font-bold">
+        <th class="px-4 py-2">Book</th>
+        <th class="px-4 py-2">Borrow</th>
+        <th class="px-4 py-2">Return</th>
+        <th class="px-4 py-2">Amount</th>
+        <th class="px-4 py-2">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for borrow in borrows %}
+      <tr class="border-b dark:border-neutral-500 {% if borrow.return_date %}bg-gray-200{% endif %}">
+        <td class="px-4 py-2">
+          <a href="{% url 'detail_book' borrow.book.id %}" class="ml-2 hover:text-teal-600 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center">
+            {{ borrow.book.title }}
+          </a>
+        </td>
+        <td class="px-4 py-2">
+          {{ borrow.borrow_date | date:"F d, Y h:i A" }}
+        </td>
+        <td class="px-4 py-2">
+          {{ borrow.return_date | date:"F d, Y h:i A" }}
+        </td>
+        <td class="px-4 py-2">
+          $ {{ borrow.amount | floatformat:2 | intcomma }}
+        </td>
+        <td class="px-4 py-2">
+          <form method="post" action="{% url 'return_book' borrow.id %}">
+            {% csrf_token %}
+            <div class="flex">
+              <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center">
+                Return
+              </button>
+            </form>
+              <a href="{% url 'add_review' borrow.book.id %}" class="ml-2 bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center">
+                Add Review
+              </a>
+            </div>
+          
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+    Selling Profile
+{% endblock %}
+
+{% block content %}
+
+<div class="text-white p-5 mt-10 text-center">
+    <h3 class="text-3xl font-bold mb-6">borrowing</h3>
+</div>
+
+<div class="container mx-auto py-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {% if user_books %}
+        {% for book in user_books %}
+        <div class="bg-white shadow-md border border-gray-200 rounded-lg">
+            <a href="{% url 'detail_book' book.id %}">
+                <img class="rounded-t-lg" src="{{ book.image.url }}" alt="">
+            </a>
+            <div class="p-5">
+                <a href="{% url 'detail_book' book.id %}">
+                    <h5 class="text-gray-900 font-bold text-xl tracking-tight mb-2">{{ book.title }}</h5>
+                </a>
+                <p class="font-normal text-gray-700 mb-3">{{ book.description|truncatewords:10 }}</p>
+                <p class="font-normal text-gray-700 mb-3"><b>Category: </b>{% for cat in book.catagories.all %}
+                    <button class="border border-teal-500 p-1 text-sm rounded-md ml-2 text-teal-800" disabled>{{ cat.name }}</button>
+                    {% endfor %}
+                </p>
+                <p class="font-normal text-gray-700 mb-3"><b>Price: </b>{{ book.price }}</p>
+                <p class="font-normal text-gray-700 mb-3"><b>Quantity: </b>{{ book.quantity }}</p>
+
+                <a href="{% url 'detail_book' book.id %}" class="text-white mb-6 bg-teal-700 hover:bg-teal-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center">
+                    Read More
+                </a>
+                <div class="flex flex-row gap-4 mb-10">
+                    <a href="{% url 'edit_post' book.id %}" class="text-white bg-teal-700 hover:bg-teal-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center">
+                        Edit
+                    </a>
+                    <a href="{% url 'delete_post' book.id %}" class="text-white bg-teal-700 hover:bg-teal-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

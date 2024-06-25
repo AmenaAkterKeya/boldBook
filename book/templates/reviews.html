@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="bg-white px-3 py-4 rounded-xl my-6">
+    <h1 class="font-bold text-3xl text-center pb-5">Add a Review for <span class="text-teal-400">{{ book.title }}</span></h1>
+    <form method="post" action="{% url 'add_review' book.id %}" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        {% csrf_token %}
+        <!-- Hidden Fields -->
+        {% for hidden_field in review_form.hidden_fields %}
+            {{ hidden_field.errors }}
+            {{ hidden_field }}
+        {% endfor %}
+        <!-- Name Field -->
+        <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="id_name">
+                   Name
+                </label>
+                <input type="text" name="name" maxlength="150" autofocus="" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" required="" id="id_name">
+            </div>
+        </div>
+        <!-- rating Field -->
+        <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="id_rating">
+                   Rating
+                </label>
+                {{ form.rating }}
+                
+            </div>
+        </div>
+        <!-- Body Field -->
+        <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="id_body">
+                    Body
+                </label>
+                <textarea name="body" maxlength="150" autofocus="" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" required="" style="resize: vertical; min-height: 120px;" id="id_body"></textarea>
+            </div>
+        </div>
+        <!-- Submit Button -->
+        <div class="flex items-center">
+            <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Add Review
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
